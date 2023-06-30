@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('value');
             $table->bigInteger('item_id')->unsigned();
-            $table->timestamps();
 
             $table->foreign('item_id')->references('id')->on('items')->cascadeOnDelete();
         });

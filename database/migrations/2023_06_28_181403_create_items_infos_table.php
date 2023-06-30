@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('items_infos', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('description_description_id')->unsigned();
-            $table->bigInteger('howtouse_description_id')->unsigned();
+            $table->string('description',5000)->nullable();
+            $table->string('howtouse',5000)->nullable();
+            $table->bigInteger('item_id')->unsigned();
+            $table->timestamps();
 
-            $table->foreign('description_description_id')->references('id')->on('descriptions')->cascadeOnDelete();
-            $table->foreign('howtouse_description_id')->references('id')->on('descriptions')->cascadeOnDelete();
+            $table->foreign('item_id')->references('id')->on('items')->cascadeOnDelete();
         });
     }
 
