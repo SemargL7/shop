@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigInteger('item_number');
             $table->bigInteger('item_facebook_pixel');
             $table->bigInteger('item_crm_id');
+            $table->bigInteger('item_category_id');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

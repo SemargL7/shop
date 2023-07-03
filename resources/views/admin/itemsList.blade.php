@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 @section('title', 'Home')
 @section('main_content')
     <section class="jumbotron text-center">
@@ -37,7 +37,8 @@
                         @csrf
                         <input name="item_id" id="item_id" hidden="hidden" value="{{$item->id}}">
                         <input name="active" id="active" hidden="hidden" value="{{$item->active}}">
-                        <button type="submit" class="btn btn-sm btn-outline-dark w-100 m-1">{{$item->active ? 'Disable' : 'Activate'}}</button>
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-dark w-100 m-1">{{$item->active ? 'Disable' : 'Activate'}}</button>
                     </form>
                     <form method="post" action="/admin/deleteItem">
                         @csrf

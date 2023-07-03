@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 @section('title', 'Home')
 @section('main_content')
     <div class="container">
@@ -30,7 +30,8 @@
                         </div>
 
 
-                        <button type="submit" class="btn btn-primary">Update Profile</button><br>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                        <br>
 
                         <button type="button" id="backInfoBtn" class="btn btn-primary m-1">Don't change</button>
                     </form>
@@ -48,12 +49,12 @@
     </div>
 
     <script>
-        document.getElementById("changeInfoBtn").addEventListener("click", function() {
+        document.getElementById("changeInfoBtn").addEventListener("click", function () {
             document.getElementById("userInfoSection").style.display = "none";
             document.getElementById("updateProfileSection").style.display = "block";
         });
 
-        document.getElementById("backInfoBtn").addEventListener("click", function() {
+        document.getElementById("backInfoBtn").addEventListener("click", function () {
             document.getElementById("userInfoSection").style.display = "block";
             document.getElementById("updateProfileSection").style.display = "none";
         });

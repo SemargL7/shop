@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Characteristics;
 use App\Models\Image;
 use App\Models\Item;
-use App\Models\Items_info;
+use App\Models\ItemsInfo;
 use Illuminate\Http\Request;
 use League\CommonMark\Extension\DescriptionList\Node\Description;
 
@@ -22,9 +22,10 @@ class AdminController extends Controller
         $item->item_number = $request->input('item_number');
         $item->item_facebook_pixel = $request->input('item_facebook_pixel');
         $item->item_crm_id = $request->input('item_crm_id');
+        $item->item_category_id = $request->input('category_id');
         $item->save();
 
-        $item_info = new Items_info();
+        $item_info = new ItemsInfo();
         $item_info->description = $request->input('description');
         $item_info->howtouse = $request->input('howtouse');
         $item_info->item_id = $item->id; // Assign the item_id to the item_info
@@ -74,7 +75,7 @@ class AdminController extends Controller
             }
         }
 
-        return redirect()->route('home');
+        return redirect()->back();
     }
 
 
@@ -93,7 +94,7 @@ class AdminController extends Controller
         $item->item_crm_id = $request->input('item_crm_id');
         $item->save();
 
-        $item_info = Items_info::where('item_id', $itemId)->first();
+        $item_info = ItemsInfo::where('item_id', $itemId)->first();
         $item_info->description = $request->input('description');
         $item_info->howtouse = $request->input('howtouse');
         $item_info->save();
@@ -156,20 +157,37 @@ class AdminController extends Controller
             Image::whereIn('id', $deleteImages)->delete();
         }
 
-        return redirect()->route('home');
+        return redirect()->route('itemsList');
     }
 
-    function createNewItemPage(){
-        return view('adminCreateNewItem');
+
+    function createNewItemPage()
+    {
+        $data = array(
+            'key' => getenv('CRM_SECRET_KEY'),
+        );
+
+        // Request categories
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, 'http://romandubil.lp-crm.biz/api/getCategories.html');
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        // Decode the JSON response
+        $categories = json_decode($response, true);
+        return view('admin.createNewItem', ['categories' => $categories]);
     }
     function editItemPage(Request $request) {
         $item_id = $request->input('item_id');
         $item = Item::where('id', $item_id)->first();
-        $images = Image::where('item_id', $item_id)->first();
+        $images = Image::where('item_id', $item_id)->get();
         $characteristics = Characteristics::where('item_id', $item_id)->get();
-        $item_info = Items_info::where('item_id', $item_id)->first();
-
-        return view('adminEditItem', [
+        $item_info = ItemsInfo::where('item_id', $item_id)->first();
+        
+        return view('admin.editItem', [
             'item' => $item,
             'images' => $images,
             'characteristics' => $characteristics,
@@ -193,7 +211,7 @@ class AdminController extends Controller
     }
 
     function itemsList(){
-        return view('adminItemsList',[
+        return view('admin.itemsList',[
             'items' => Item::all()
         ]);
     }
