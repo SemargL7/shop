@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.layoutProduct')
 @section('title', 'Home')
 @section('main_content')
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
@@ -199,9 +199,12 @@
         $(document).ready(function () {
             var category_id = $('#item_list').data('category-id');
             $.ajax({
-                url: '/getItemsByCategory/' + category_id,
-                type: 'GET',
+                url: '/api/getItemsByCategory',
+                type: 'POST',
                 dataType: 'json',
+                data: {
+                    category_id: category_id
+                },
                 success: function (response) {
                     var items = response.items.data;
                     var itemList = $('#item_list');

@@ -21,8 +21,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function() {
     Route::get('/', 'MainController@home')
         ->name('home');
 
-
-
     Route::get('/product/{item_number}', 'MainController@itemView')
         ->name('itemView');
 

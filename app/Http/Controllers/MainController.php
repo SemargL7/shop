@@ -18,12 +18,31 @@ class MainController extends Controller
     public function home(Request $request)
     {
         $filter = $request->input('filter');
+        $categories = $request->input('categories');
 
-        $items = Item::with('images')
-            ->when($filter, function ($query, $filter) {
-                return $query->where('item_name', 'like', '%' . $filter . '%');
-            })
-            ->paginate(10);
+        $query = Item::query();
+
+        if ($categories) {
+            $categoryIds = is_array($categories) ? $categories : [$categories];
+            $query->whereIn('item_category_id', $categoryIds);
+        }
+
+        if ($filter) {
+            $query->where('item_name', 'like', '%' . $filter . '%');
+        }
+
+        $items = $query->paginate(10);
+
+        foreach ($items as $item) {
+            $image = Image::where('item_id', $item->id)->first();
+
+            if ($image) {
+                $item->image = $image;
+                $item->image->image = $image->image;
+            } else {
+                $item->image = null;
+            }
+        }
 
         return view('home', compact('items'));
     }
