@@ -11,12 +11,12 @@ class ApiController extends Controller
 {
     public function getAllCategories()
     {
-        return CrmService::getCategories();
+        return (new CrmService)->getCategories();
     }
     public function getProductsByCategory(Request $request)
     {
         $category_id = $request->input('category_id');
-        return CrmService::getProductsByCategory($category_id);
+        return (new CrmService)->getProductsByCategory($category_id);
     }
 
     public function getItemsByCategory(Request $request)

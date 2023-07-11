@@ -38,7 +38,7 @@ class CrmService
             return response()->json(['error' => 'Failed to parse JSON response'], 500);
         }
 
-        return response()->json($categories);
+        return $categories;
     }
 
     function getProductsByCategory($category_id)
@@ -64,9 +64,9 @@ class CrmService
 
         if ($response && $response['status'] === 'ok') {
             $products = $response['data'];
-            return response()->json($products);
+            return $products;
         } else {
-            return response()->json([]);
+            return [];
         }
     }
 
@@ -112,23 +112,6 @@ class CrmService
         $out = curl_exec($curl);
         curl_close($curl);
 
-
-        if ($out === false) {
-            // cURL request failed
-            return redirect()->back()->with('error', 'API request failed');
-        } else {
-            // Assuming the response is in JSON format
-            $response = json_decode($out, true);
-
-            // Check the status field in the response
-            if (isset($response['status']) && $response['status'] === 'ok') {
-                // API request was successful
-                return redirect()->back()->with('success', $response['message']);
-            } else {
-                // API request returned an error
-                return redirect()->back()->with('error', $response['message']);
-            }
-        }
     }
 
     function getProductById($product_id){

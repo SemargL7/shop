@@ -178,7 +178,8 @@ class AdminController extends Controller
 
     function createNewItemPage()
     {
-        return view('admin.createNewItem', ['categories' => CrmService::getCategories()]);
+
+        return view('admin.createNewItem', ['categories' => (new CrmService)->getCategories()]);
     }
     function editItemPage(Request $request) {
         $item_id = $request->input('item_id');
