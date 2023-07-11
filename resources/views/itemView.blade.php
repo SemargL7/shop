@@ -78,14 +78,16 @@
                         {{$product_price}}
                         <span class="h5 bg-danger rounded"><s>{{$product_price*1.3}}</s></span>
                     </h3>
+                    <input type="text" id="product_id" name="product_id" value="{{$item->item_crm_id}}" hidden="hidden">
+                    <input type="text" id="product_price" name="product_price" value="{{$product_price}}" hidden="hidden">
                     <div class="form-group m-2">
                         <label for="name" class="w-100 bg-dark text-light rounded-top">Full name</label>
-                        <input type="text" class="form-control rounded-0  w-100" id="name" placeholder="Enter your name"
+                        <input type="text" class="form-control rounded-0  w-100" id="name" name="name" placeholder="Enter your name"
                                required>
                     </div>
                     <div class="form-group m-2">
                         <label for="phone" class="w-100 bg-dark text-light rounded-top">Phone</label>
-                        <input type="text" id="phone" class="form-control rounded-0  w-100"
+                        <input type="text" id="phone" name="phone" class="form-control rounded-0  w-100"
                                placeholder="Enter your phone" value="+380" pattern="^+380\d{9}$" title="380999999999"
                                required>
                     </div>

@@ -4,10 +4,7 @@
     <main role="main">
         <section class="jumbotron">
             <div class="container">
-                <h1 class="jumbotron-heading">Item view</h1>
-                <p class="lead text-muted">Something short and leading about the collection below—its contents, the
-                    creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it
-                    entirely.</p>
+                <h1 class="jumbotron-heading mx-auto">Асортимент</h1>
                 <div class="row">
                     <div class="col-md-12">
                         <form action="/" method="get">
@@ -15,7 +12,7 @@
                                 <div class="col-md-2 p-0">
                                     <li class="dropdown list-unstyled" id="dropdownCategory">
                                         <button id="category-dropdown-button" class="btn btn-outline-dark me-2 dropdown-toggle w-100 rounded-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Category
+                                            Категорії
                                         </button>
                                         <ul class="dropdown-menu rounded-0" id="categories">
 

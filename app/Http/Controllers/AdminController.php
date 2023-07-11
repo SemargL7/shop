@@ -6,6 +6,7 @@ use App\Models\Characteristics;
 use App\Models\Image;
 use App\Models\Item;
 use App\Models\ItemsInfo;
+use App\Services\CrmService;
 use Illuminate\Http\Request;
 use League\CommonMark\Extension\DescriptionList\Node\Description;
 
@@ -14,7 +15,14 @@ class AdminController extends Controller
     public function createNewItem(Request $request)
     {
         $valid = $request->validate([
-
+            'item_name' => 'required|string',
+            'item_number' => 'required|string',
+            'item_facebook_pixel' => 'required|string',
+            'item_crm_id' => 'required|string',
+            'category_id' => 'required|integer',
+            'description' => 'required|string',
+            'howtouse' => 'required|string',
+            'image.*' => 'required|mimes:jpeg,png'
         ]);
 
         $item = new Item();
@@ -82,7 +90,14 @@ class AdminController extends Controller
     public function updateItem(Request $request)
     {
         $valid = $request->validate([
-
+            'item_name' => 'required|string',
+            'item_number' => 'required|string',
+            'item_facebook_pixel' => 'required|string',
+            'item_crm_id' => 'required|string',
+            'category_id' => 'required|integer',
+            'description' => 'required|string',
+            'howtouse' => 'required|string',
+            'image.*' => 'required|mimes:jpeg,png'
         ]);
 
         $itemId = $request->input('item_id');
@@ -163,22 +178,7 @@ class AdminController extends Controller
 
     function createNewItemPage()
     {
-        $data = array(
-            'key' => getenv('CRM_SECRET_KEY'),
-        );
-
-        // Request categories
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, 'http://romandubil.lp-crm.biz/api/getCategories.html');
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        // Decode the JSON response
-        $categories = json_decode($response, true);
-        return view('admin.createNewItem', ['categories' => $categories]);
+        return view('admin.createNewItem', ['categories' => CrmService::getCategories()]);
     }
     function editItemPage(Request $request) {
         $item_id = $request->input('item_id');
@@ -186,7 +186,7 @@ class AdminController extends Controller
         $images = Image::where('item_id', $item_id)->get();
         $characteristics = Characteristics::where('item_id', $item_id)->get();
         $item_info = ItemsInfo::where('item_id', $item_id)->first();
-        
+
         return view('admin.editItem', [
             'item' => $item,
             'images' => $images,
@@ -202,6 +202,10 @@ class AdminController extends Controller
     }
 
     public function switchActiveShowStatusItem(Request $request){
+        $valid = $request->validate([
+            'item_id' => 'required|integer',
+            'active' => 'required|boolean',
+        ]);
         $itemId = $request->input('item_id');
         $active_status = $request->input('active');
         $item = Item::find($itemId);
@@ -210,9 +214,22 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    function itemsList(){
-        return view('admin.itemsList',[
-            'items' => Item::all()
+    function itemsList(Request $request)
+    {
+        $query = Item::query();
+
+        // Filter items based on criteria
+        if ($request->has('filter')) {
+            $filter = $request->input('filter');
+            $query->where('item_name', 'like', '%' . $filter . '%')
+                ->orWhere('item_number', 'like', '%' . $filter . '%');
+        }
+
+        $items = $query->paginate(10)->withQueryString();
+
+        return view('admin.itemsList', [
+            'items' => $items,
+            'filter' => $request->input('filter')
         ]);
     }
 }

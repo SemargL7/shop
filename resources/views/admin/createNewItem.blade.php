@@ -28,8 +28,7 @@
 
             <div class="col-md-12">
 
-                <form method="post" action="/admin/createNewItem" class="mx-auto w-100" onsubmit="submitForm(event)" enctype="multipart/form-data"
-                      >
+                <form method="post" action="/admin/createNewItem" class="mx-auto w-100" onsubmit="submitForm(event)" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="category_id">Category</label>
@@ -49,7 +48,7 @@
                         </select>
                     </div>
                     <label for="item_name">Item name</label>
-                    <input type="text" name="item_name" id="item_name" placeholder="Item name" class="form-control" readonly>
+                    <input type="text" name="item_name" id="item_name" placeholder="Item name" class="form-control">
                     <input type="text" name="item_crm_id" id="item_crm_id" placeholder="Item cmr id" hidden="hidden"
                            class="form-control" readonly>
                     <label for="item_number">Item number</label>
